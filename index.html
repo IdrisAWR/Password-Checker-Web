@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src https://api.pwnedpasswords.com; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <title>Pass-Q Password Checker & Generator</title>
+  <link rel="icon" type="image/png" href="logo-passq.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <img class="logo" src="logo-passq.png" alt="" width="64" height="64">
+      <div>
+        <h1>Pass-Q</h1>
+        <p>Uji kekuatan password dan buat yang baru</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== Checker ===== -->
+    <section class="panel checker" aria-labelledby="checker-title">
+      <h2 id="checker-title">Cek kekuatan password</h2>
+
+      <label for="pw-input">Password</label>
+      <div class="field">
+        <input id="pw-input" type="password" autocomplete="off" autocapitalize="off"
+               spellcheck="false" placeholder="Ketik password untuk diuji">
+        <button id="toggle-visibility" type="button" class="ghost icon-btn" aria-pressed="false"
+                aria-label="Tampilkan password" title="Tampilkan password">
+          <svg class="eye-open" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+          <svg class="eye-off" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="meter" role="progressbar" aria-label="Kekuatan password"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meter">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="summary" aria-live="polite">
+        <p id="summary-empty" class="empty">
+          Ketik password di atas untuk melihat tingkat kekuatan, perkiraan waktu bobol, dan pola yang lemah.
+          Tidak ada yang dikirim ke mana pun saat kamu mengetik.
+        </p>
+        <div id="summary-body" hidden>
+          <p class="level"><strong id="meter-label">Belum ada input</strong></p>
+          <dl class="stats">
+            <div><dt>Perkiraan entropi</dt><dd id="entropy">-</dd></div>
+            <div><dt>Perkiraan waktu bobol*</dt><dd id="crack-time">-</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <h3>Kriteria</h3>
+      <ul id="checklist" class="checklist"></ul>
+
+      <div id="findings-wrap" hidden>
+        <h3>Temuan pola</h3>
+        <ul id="findings" class="findings"></ul>
+      </div>
+
+      <div class="breach">
+        <button id="hibp-btn" type="button" disabled>Cek apakah pernah bocor</button>
+        <p id="hibp-result" class="hibp-result" aria-live="polite"></p>
+        <p class="hint">
+          Password tidak pernah dikirim. Hanya 5 karakter pertama dari hash SHA-1 yang dikirim
+          ke Have I Been Pwned (metode k-anonymity), dan hanya saat tombol ditekan.
+        </p>
+      </div>
+
+      <p class="hint">*Asumsi serangan offline: 10 miliar tebakan per detik pada hash cepat. Hanya perkiraan.</p>
+    </section>
+
+    <!-- ===== Generator ===== -->
+    <section class="panel generator" aria-labelledby="gen-title">
+      <h2 id="gen-title">Generator password</h2>
+
+      <div class="result">
+        <output id="gen-output" class="gen-output" for="gen-length" aria-live="polite">-</output>
+        <button id="gen-copy" type="button" disabled>Salin</button>
+      </div>
+      <p id="copy-status" class="hint" aria-live="polite"></p>
+
+      <div class="length-row">
+        <label for="gen-length">Panjang</label>
+        <span id="gen-length-value" class="length-value">16</span>
+      </div>
+      <input id="gen-length" type="range" min="8" max="64" value="16">
+
+      <fieldset>
+        <legend>Karakter yang dipakai</legend>
+        <label class="check"><input id="gen-lower" type="checkbox" checked> <span>Huruf kecil (a-z)</span></label>
+        <label class="check"><input id="gen-upper" type="checkbox" checked> <span>Huruf besar (A-Z)</span></label>
+        <label class="check"><input id="gen-digits" type="checkbox" checked> <span>Angka (0-9)</span></label>
+        <label class="check"><input id="gen-symbols" type="checkbox" checked> <span>Simbol (!@#$...)</span></label>
+        <label class="check"><input id="gen-ambiguous" type="checkbox"> <span>Hindari karakter mirip (I, l, 1, O, 0, o)</span></label>
+      </fieldset>
+
+      <button id="gen-btn" type="button" class="primary">Buat password baru</button>
+      <p id="gen-meta" class="hint" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Dibuat untuk edukasi. Tidak ada data yang disimpan atau dikirim ke server mana pun
+      selain permintaan opsional ke Have I Been Pwned.
+    </p>
+  </footer>
+
+  <button id="theme-toggle" type="button" class="icon-btn theme-btn" aria-pressed="false"
+          aria-label="Mode gelap" title="Mode gelap">
+    <svg class="icon-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    </svg>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>

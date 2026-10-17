@@ -1,0 +1,5 @@
+Plus Jakarta Sans (c) The Plus Jakarta Sans Project Authors
+JetBrains Mono (c) The JetBrains Mono Project Authors
+Keduanya dilisensikan di bawah SIL Open Font License 1.1
+https://openfontlicense.org
+Berkas diambil dari paket @fontsource-variable (jsDelivr).

@@ -1,0 +1,449 @@
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+/* Pass-Q
+   Tipografi: Plus Jakarta Sans (tegas, geometris, tetap hangat) dan JetBrains Mono
+   untuk password supaya karakter mirip (l, 1, O, 0) mudah dibedakan. Keduanya
+   di-host sendiri; CSP melarang font dari pihak ketiga.
+   Aksen: satu warna biru yang diambil dari logo, dipakai hanya untuk aksi utama dan fokus. */
+
+:root {
+  color-scheme: light;
+
+  --bg: #eaf1fc;
+  --surface: #ffffff;
+  --sunken: #eef3fb;
+  --border: #d3deef;
+  --ink: #0e1b3a;
+  --muted: #55648a;
+
+  --accent: #1560d4;
+  --accent-hover: #0f4fb0;
+  --on-accent: #ffffff;
+  --brand: #0f2a6b;
+  --on-brand: #f1f6ff;
+  --brand-muted: #a9bde8;
+  --spark: #ffc247;
+
+  --lvl0: #c2362b;
+  --lvl1: #d2601a;
+  --lvl2: #c79a10;
+  --lvl3: #5f9a1f;
+  --lvl4: #0f8a5f;
+  --bad-ink: #b02a20;
+  --good-ink: #0b6e4a;
+  --warn-ink: #805800;
+
+  --r-sm: 8px;
+  --r-lg: 16px;
+  --lift: 0 12px 32px -12px rgba(15, 42, 107, .35);
+
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0a1226;
+    --surface: #111c38;
+    --sunken: #0c1530;
+    --border: #25365f;
+    --ink: #eaf0ff;
+    --muted: #9aaad0;
+    --accent: #5aa2ff;
+    --accent-hover: #86bbff;
+    --on-accent: #061a36;
+    --brand: #1a3a8f;
+    --on-brand: #f1f6ff;
+    --brand-muted: #b4c7f2;
+    --spark: #ffc247;
+    --lvl0: #f0665a;
+    --lvl1: #f08a45;
+    --lvl2: #e5b93c;
+    --lvl3: #93c94a;
+    --lvl4: #43c993;
+    --bad-ink: #ff8a7f;
+    --good-ink: #5fd8a3;
+    --warn-ink: #e9bd52;
+    --lift: 0 14px 34px -12px rgba(0, 0, 0, .8);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a1226;
+  --surface: #111c38;
+  --sunken: #0c1530;
+  --border: #25365f;
+  --ink: #eaf0ff;
+  --muted: #9aaad0;
+  --accent: #5aa2ff;
+  --accent-hover: #86bbff;
+  --on-accent: #061a36;
+  --brand: #1a3a8f;
+  --on-brand: #f1f6ff;
+  --brand-muted: #b4c7f2;
+  --spark: #ffc247;
+  --lvl0: #f0665a;
+  --lvl1: #f08a45;
+  --lvl2: #e5b93c;
+  --lvl3: #93c94a;
+  --lvl4: #43c993;
+  --bad-ink: #ff8a7f;
+  --good-ink: #5fd8a3;
+  --warn-ink: #e9bd52;
+  --lift: 0 14px 34px -12px rgba(0, 0, 0, .8);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  position: relative;
+  background-image: radial-gradient(60rem 22rem at 85% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+  background-repeat: no-repeat;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+/* ---------- Layout ---------- */
+
+.site-header, main, .site-footer {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-inline: 20px;
+}
+
+.site-header {
+  padding-block: 36px 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand { display: flex; align-items: center; gap: 16px; }
+.logo { width: 64px; height: 64px; border-radius: 16px; flex: none; transition: transform .25s ease; }
+.logo:hover { transform: rotate(-4deg) scale(1.05); }
+.brand h1 { color: var(--accent); margin: 0; font-size: 2.1rem; line-height: 1.1; letter-spacing: -.03em; font-weight: 800; }
+.brand p { margin: 8px 0 0; color: var(--muted); max-width: 46ch; }
+
+main {
+  padding-block: 20px;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+@media (min-width: 860px) {
+  main { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+}
+
+.site-footer { padding-block: 8px 48px; }
+.site-footer p { margin: 0; color: var(--muted); font-size: .85rem; max-width: 70ch; }
+
+/* ---------- Panel ---------- */
+
+.panel { padding: 4px 0; }
+.panel h2 { margin: 0 0 16px; font-size: 1.3rem; letter-spacing: -.015em; }
+.panel h3 { margin: 24px 0 10px; font-size: .95rem; color: var(--accent); font-weight: 700; }
+
+/* Checker: datar, hanya dibatasi garis tipis */
+.checker {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px;
+}
+
+/* Generator: satu-satunya permukaan yang terangkat */
+.generator {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  box-shadow: var(--lift);
+}
+
+label { display: block; font-weight: 600; margin-bottom: 8px; }
+
+/* ---------- Controls ---------- */
+
+input[type="password"], input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.05rem;
+}
+input[type="password"]:focus, input[type="text"]:focus { outline: none; }
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 6px;
+  background: var(--sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+
+button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .15s, border-color .15s;
+}
+button:hover:not(:disabled) { background: var(--sunken); border-color: var(--muted); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button.ghost { background: transparent; border-color: transparent; color: var(--muted); }
+button.ghost:hover:not(:disabled) { background: var(--sunken); border-color: transparent; color: var(--ink); }
+button.primary {
+  width: 100%;
+  margin-top: 20px;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+button.primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Tombol ikon mata */
+.icon-btn { width: 44px; padding: 0; display: inline-grid; place-items: center; }
+.icon-btn .eye-off { display: none; }
+.icon-btn[aria-pressed="true"] .eye-open { display: none; }
+.icon-btn[aria-pressed="true"] .eye-off { display: block; }
+
+/* ---------- Meter (5 segmen = 5 level) ---------- */
+
+.meter {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin: 20px 0 16px;
+}
+.meter span {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--sunken);
+  border: 1px solid var(--border);
+  transition: background-color .2s, border-color .2s;
+}
+.meter.lvl0 span:nth-child(-n+1) { background: var(--lvl0); border-color: var(--lvl0); }
+.meter.lvl1 span:nth-child(-n+2) { background: var(--lvl1); border-color: var(--lvl1); }
+.meter.lvl2 span:nth-child(-n+3) { background: var(--lvl2); border-color: var(--lvl2); }
+.meter.lvl3 span:nth-child(-n+4) { background: var(--lvl3); border-color: var(--lvl3); }
+.meter.lvl4 span:nth-child(-n+5) { background: var(--lvl4); border-color: var(--lvl4); }
+
+/* ---------- Ringkasan ---------- */
+
+.summary .empty { margin: 0; color: var(--muted); max-width: 52ch; }
+.summary .level { margin: 0 0 12px; font-size: 1.5rem; letter-spacing: -.02em; }
+.stats { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.stats div { padding: 12px 14px; background: var(--sunken); border-radius: var(--r-sm); }
+.stats dt { color: var(--muted); font-size: .8rem; }
+.stats dd { margin: 2px 0 0; font-family: var(--mono); font-size: 1.1rem; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* ---------- Kriteria & temuan ---------- */
+
+.checklist, .findings { list-style: none; margin: 0; padding: 0; font-size: .92rem; }
+.checklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 16px; }
+
+.checklist li { position: relative; padding-left: 28px; }
+.checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .2em;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+}
+.checklist li.ok { color: var(--ink); }
+.checklist li.ok::before { background: var(--lvl4); border-color: var(--lvl4); }
+.checklist li.ok::after {
+  content: "";
+  position: absolute;
+  left: 5.5px;
+  top: calc(.2em + 3px);
+  width: 4px;
+  height: 8px;
+  border: solid var(--surface);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.checklist li.no { color: var(--muted); }
+
+.findings { display: grid; gap: 8px; }
+.findings li {
+  padding: 10px 14px;
+  background: var(--sunken);
+  border-radius: var(--r-sm);
+  color: var(--warn-ink);
+}
+.findings li.none { color: var(--good-ink); }
+
+/* ---------- Cek kebocoran ---------- */
+
+.breach { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.hibp-result { margin: 12px 0 0; font-weight: 600; }
+.hibp-result:empty { display: none; }
+.hibp-result.bad { color: var(--bad-ink); }
+.hibp-result.good { color: var(--good-ink); }
+.hibp-result.err { color: var(--warn-ink); }
+
+.hint { color: var(--muted); font-size: .8rem; margin: 10px 0 0; max-width: 62ch; }
+
+/* ---------- Generator ---------- */
+
+.result { display: flex; gap: 8px; align-items: stretch; }
+.gen-output {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  background: var(--sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.result button { align-self: stretch; }
+#copy-status:empty { display: none; }
+
+.length-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px; }
+.length-row label { margin: 0; }
+.length-value { font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 8px 0 18px; }
+
+fieldset { border: 0; padding: 0; margin: 0; }
+legend { padding: 0; margin-bottom: 8px; font-weight: 600; }
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  margin: 0;
+  font-weight: 400;
+  cursor: pointer;
+}
+.check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); flex: none; }
+
+/* ---------- Responsif & gerak ---------- */
+
+@media (max-width: 480px) {
+  .site-header { flex-direction: column; }
+  .checker, .generator { padding: 18px; }
+  .brand h1 { font-size: 1.8rem; }
+}
+
+/* ---------- Animasi tipis ---------- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Sekali saat halaman dibuka, bertahap */
+.site-header { animation: fade .5s ease both; } /* tanpa transform agar tombol tema (fixed) tetap menempel ke viewport */
+.checker { animation: rise .5s .08s ease both; }
+.generator { animation: rise .5s .16s ease both; }
+.site-footer { animation: fade .6s .3s ease both; }
+
+/* Hasil yang baru muncul */
+#summary-body:not([hidden]), #findings-wrap:not([hidden]), .hibp-result:not(:empty) { animation: fade .25s ease both; }
+.findings li, .checklist li { animation: fade .25s ease both; }
+
+button:active:not(:disabled) { transform: scale(.97); }
+button { transition: background-color .15s, border-color .15s, transform .1s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* ---------- Momen warna: generator berlatar biru merek ---------- */
+
+.generator {
+  background: var(--brand);
+  border-color: transparent;
+  color: var(--on-brand);
+}
+.generator h2, .generator label, .generator legend { color: var(--on-brand); }
+.generator .hint, .generator .length-value { color: var(--brand-muted); }
+.generator .length-value { color: var(--spark); }
+.generator .gen-output { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .18); color: #fff; }
+.generator .result button { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .22); color: #fff; }
+.generator .result button:hover:not(:disabled) { background: rgba(255, 255, 255, .22); border-color: rgba(255, 255, 255, .4); }
+.generator input[type="range"], .generator .check input { accent-color: var(--spark); }
+.generator button.primary { background: var(--spark); border-color: var(--spark); color: #2a1c00; }
+.generator button.primary:hover:not(:disabled) { background: #ffd273; border-color: #ffd273; }
+.generator :focus-visible { outline-color: var(--spark); }
+
+/* Kotak statistik dan hasil lebih berwarna */
+.stats div:first-child { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.stats div:last-child { background: color-mix(in srgb, var(--spark) 22%, var(--surface)); }
+.stats dd { color: var(--ink); }
+
+/* ---------- Tombol tema (ikon saja) ---------- */
+
+.theme-btn {
+  position: absolute;
+  top: 36px;
+  right: max(20px, calc(50% - 500px));
+  z-index: 10;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+}
+.theme-btn .icon-sun { display: none; }
+.theme-btn[aria-pressed="true"] .icon-moon { display: none; }
+.theme-btn[aria-pressed="true"] .icon-sun { display: block; }
+
+/* Di ponsel: melayang di kanan bawah. Bayangan = penanda elevasi karena menutupi konten */
+@media (max-width: 600px) {
+  .theme-btn {
+    position: fixed;
+    top: auto;
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    z-index: 10;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    box-shadow: var(--lift);
+  }
+  .theme-btn, .theme-btn:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .site-footer { padding-bottom: 88px; }
+}
