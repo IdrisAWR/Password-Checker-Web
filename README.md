@@ -3,7 +3,7 @@
 Aplikasi web statis untuk menguji kekuatan password dan membuat password acak yang aman.
 Seluruh logika berjalan di browser. Tidak ada backend, tidak ada penyimpanan data.
 
-> Demo: _isi dengan link Vercel kamu setelah deploy_
+> Demo: https://passq-checker.vercel.app/
 
 ## Fitur
 
